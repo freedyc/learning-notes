@@ -14,7 +14,7 @@ function run(g) {
                 })
             } else {
                 result = task.next(result.value);
-                step();
+                step()//;
             }
         }
     }
