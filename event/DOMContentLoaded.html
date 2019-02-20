@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DOMContentLoaded</title>
+    <script src='./core.min.js'></script>
+    <script>
+        new TypeError('123');
+        var obj = { c: 13};
+        Object.defineProperty(obj, 'a', { value: 123, configurable: false, enumerable: false, writable: false });
+        obj.a1 = 123;
+        console.log('Value:', obj)
+
+        if (document.addEventListener) {
+            document.addEventListener('readystatechange', function () {
+                console.log('current document readyState  > ' + document.readyState);
+            })
+            document.addEventListener('DOMContentLoaded', function () {
+                console.log('Loader done')
+            });
+        } else if (document.attachEvent) {
+            console.log("IE");
+            document.attachEvent('onreadystatechange', function () {
+                console.log('current IE document readyState > ' + document.readyState);
+                console.log('IE Document Done ');
+            })
+        }
+        
+        for (var i = 0; i < 100000; i++) {
+            // console.log(i);
+        }
+    </script>
+</head>
+<body>
+    <div id="div">Start</div>
+    <script>
+        var div = document.getElementById('div'); 
+        console.log(Object.defineProperty(div, 'innerHTML', {value: 3}));
+
+    </script>
+</body>
+</html>
