@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <style>
+  
+    </style>
+</head>
+<body>
+    <canvas id="loginGraph" width="1000", height="600"></canvas>
+</body>
+<script>
+let k = 0;
+let i = 1;
+const serverImg = new Image();
+serverImg.src = "server.png";
+serverImg.onload = () => {
+    draw();
+}
+function draw() {
+    const canvas = document.getElementById('loginGraph');
+    const ctx = canvas.getContext('2d');
+    
+    ctx.clearRect(0, 0, 1000, 600);
+    const drawCircle = (x, y) => {
+        ctx.fillStyle = '#9ffff5';
+        ctx.beginPath();
+        ctx.arc(x, y ,4 , Math.PI * 2, 0, true);
+        ctx.fill();
+    }
+    const drawMask = (x, y, w, h) => {
+        const l = 20;
+        const rx = x - l;
+        const ry = y - l;
+        const rw = w + l * 2;
+        const rh = h + l * 2;
+        const cx = rx + (rw / 2);
+        const cy = ry + (rh / 2);
+        const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, rh / 2);
+        gradient.addColorStop(0, '#4fece177');
+        gradient.addColorStop(0.6, '#4fece155');
+        gradient.addColorStop(1, '#4fece101');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(rx, ry, rw, rh);
+    }
+    const sList = [
+        { width: 133, height: 169, opacity: 0.34, x: 644 , y: 310, line: { x1: 673, y1: 382, x2: 476, y2: 421, opacity: 0.8 } },
+        { width: 146, height: 175, opacity: 0.45, x: 331 , y: 378, line: { x1: 338, y1: 417, x2: 194, y2: 370, opacity: 0.7 } },
+        { width: 104, height: 130, opacity: 0.26, x: 107 , y: 292, line: { x1: 209, y1: 345, x2: 389, y2: 287, opacity: 0.6 } },
+        { width: 87,  height: 105, opacity: 0.36, x: 382 , y: 225, line: { x1: 459, y1: 243, x2: 508, y2: 213, opacity: 0.5 } },
+        { width: 75,  height: 91,  opacity: 0.26, x: 499 , y: 157, line: { x1: 521, y1: 166, x2: 340, y2: 172, opacity: 0.5 } },
+        { width: 67,  height: 80,  opacity: 0.20, x: 274 , y: 135, line: { x1: 274, y1: 162, x2: 223, y2: 120, opacity: 0.3 } },
+        { width: 48,  height: 60,  opacity: 0.10, x: 181 , y: 83, line: { x1: 225, y1: 93, x2: 273, y2: 59, opacity: 0.2 } },
+        { width: 33,  height: 40,  opacity: 0.06, x: 265 , y: 34, line: { x1: 273, y1: 59, x2: 273, y2: 0, opacity: 0 } },
+    ];
+    ctx.save();
+    sList.forEach((it, index) => {
+        ctx.globalAlpha = 1;
+        if (k == index) {
+            drawMask(it.x, it.y, it.width, it.height);
+            it.opacity = 0.9;
+        }
+        ctx.globalAlpha = it.opacity;
+        ctx.drawImage(serverImg, it.x, it.y, it.width, it.height);
+        ctx.beginPath();
+        ctx.globalAlpha = it.line.opacity;
+        ctx.moveTo(it.line.x1, it.line.y1);
+        ctx.lineTo(it.line.x2, it.line.y2);
+        ctx.strokeStyle = "#5cfff3";
+        ctx.stroke();
+    }); 
+    ctx.restore();
+
+    const sLines = sList.map((it) => it.line);
+    const move = (line) => {
+        const origin = {
+            x: line.x1,
+            y: line.y1,
+        }
+        const target = {
+            x: line.x2,
+            y: line.y2,
+        }
+
+        const current = origin;
+        const xw = Math.abs(origin.x - target.x);
+        const yh = Math.abs(origin.y - target.y);
+        const length = Math.sqrt(Math.pow(xw, 2) + Math.pow(yh, 2));
+        if (i < length) {
+            if (origin.x < target.x) {
+                current.x = origin.x + xw / length * i;
+            } else {
+                current.x = origin.x - xw / length * i;
+            }
+            if (origin.y < target.y) {
+                current.y = origin.y + yh / length * i;
+            } else {
+                current.y = origin.y - yh / length * i;
+            }
+        }
+        i++
+        drawCircle(current.x, current.y);
+        if (i > length) {
+            i = 1;
+            return true;
+        }
+        return  false;
+    }
+    if (move(sLines[k])) {
+        if (k < sLines.length - 1) {
+            k++;
+        } else {
+            k = 0;
+        }
+    }
+}
+setInterval(draw, 100);
+
+  
+</script>
+</html>
