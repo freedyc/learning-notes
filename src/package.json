@@ -13,6 +13,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "jquery": "^3.4.1",
+    "mongoose": "^5.8.3",
     "nodemailer": "^6.4.2"
   }
 }
