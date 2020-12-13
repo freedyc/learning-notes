@@ -1,2 +1,2 @@
-# es6
-Learn es6 
+# Ruby
+Learn ruby 
