@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <script src="/socket.io.js" ></script>
+    <script>
+        window.onload = () => {
+            const oBtn = document.getElementById('btn');
+            const socket = io();
+            oBtn.onclick = () => {
+                console.log('click btn');
+                const oTxt = document.getElementById('txt');
+                console.log(oTxt);
+                socket.emit('message1', oTxt.value);
+                oTxt.value = ''
+            }
+            socket.on('message2', (data) => {
+                console.log("客户端呀，你别没有反应呀",data)
+            });
+
+            socket.on('allMessage', (data) => {
+                const oAllMessage = document.getElementById('allMessage');
+                const div = document.createElement('div');
+                div.innerHTML = data;
+                oAllMessage.appendChild(div);
+                console.log('allMessage', data);
+            })
+        }
+    </script>
+</head>
+<body>
+    <div id="allMessage"></div>
+    <textarea rows="30" cols="20" id="txt"></textarea>
+    <button id="btn">连接</button>
+</body>
+</html>

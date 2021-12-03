@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RequestIdleCallback</title>
+</head>
+<body>
+    <div>
+        <input type="text" id="input" value="" />
+    </div>
+    Input框输入的时候计算：<div id="stext"></div>
+    空闲时计算：<div id="stext1"></div>
+</body>
+<script>
+    // 优先级较低的任务
+    const $stext1 =document.getElementById('stext1');
+    const showLog = () => {
+        console.time('空闲时计算');
+        for (let j=0; j< 10000; j++) {
+            $stext1.innerHTML = Math.random() * j;
+        }
+        console.timeEnd('空闲时计算');
+    }
+    const callback = (idleDeadline) => {
+        if (!idleDeadline) {
+            showLog();
+            return;
+        }
+        if (idleDeadline.timeRemaining() > 0) {
+            showLog();
+        }
+    }
+
+
+    // 优先级较高的任务
+    const $input = document.getElementById('input');
+    const $stext =document.getElementById('stext');
+    $input.addEventListener('input', (e) => {
+        // console.log('change', e);
+        const id = window.requestIdleCallback(callback); // 先让浏览器事件和函数执行，执行完成后在有空闲时间了，再去执行callback
+        // callback(); // 这么执行就会先执行callback函数
+        $stext.innerHTML = e.target.value;
+        i = e.target.value;
+        console.time('input-计算');
+        for (let j=0; j< 10000; j++) {
+            $stext.innerHTML = Number($stext.innerHTML) + j;
+        }
+        console.log(navigator.scheduling.isInputPending());
+        if (id % 2 === 0) {
+            cancelIdleCallback(id);
+        }
+        console.timeEnd('input-计算');
+    })
+    </script>
+</html>
