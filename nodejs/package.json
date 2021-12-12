@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/freedyc/learning-notes/issues"
   },
-  "homepage": "https://github.com/freedyc/learning-notes#readme"
+  "homepage": "https://github.com/freedyc/learning-notes#readme",
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
 }
