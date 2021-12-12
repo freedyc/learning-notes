@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入 echarts.js -->
+    <script src="https://cdn.bootcss.com/echarts/4.3.0-rc.1/echarts.js"></script>
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+        }
+    </style>
+</head>
+
+<body style="width:100%">
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="width: 80%;height:400px;margin:0 auto;border: 1px             red solid"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        //定义数据
+        var p_real, p_bottom, p_open, p_close, p_top;
+        p_bottom = 5430;
+        p_top = 5480;
+        p_close = 5470;
+        p_open = 5450;
+        var dates = [];
+        var data2 = [];
+        var data = [];
+        var data_new = [];
+        var counter = 0;
+        setInterval(function() {
+            //开盘，收购盘，最低，最高,实时价
+            p_real = Math.ceil(Math.random() * 5550 + 5440);
+            if (p_real > p_top) p_top = p_real;
+            if (p_real < p_bottom) p_bottom = p_real;
+            p_close = p_real;
+            data_cart = [p_open, p_close, p_bottom, p_top];
+            if (counter % 3 == 0) {
+                data.push(data_cart);
+                dates.push('time');
+                p_open = Math.ceil(Math.random() * 5500 + 5400);
+            } else {
+                data[data.length - 1] = data_cart;
+            }
+
+            var option = {
+                baseOption: {
+
+                    backgroundColor: '#21202D',
+                    legend: {
+                        data: ['日K', 'close'],
+                        inactiveColor: '#777',
+                        textStyle: {
+                            color: '#fff'
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            animation: false,
+                            lineStyle: {
+                                color: '#376df4',
+                                width: 2,
+                                opacity: 0
+                            }
+                        }
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: dates,
+                        axisLine: {
+                            lineStyle: {
+                                color: '#8392A5'
+                            }
+                        }
+                    },
+                    yAxis: {
+                        min: 0,
+                        max: 12000,
+                        scale: true,
+                        axisLine: {
+                            lineStyle: {
+                                color: '#8392A5'
+                            }
+                        },
+                        splitLine: {
+                            show: false
+                        }
+                    },
+                    animation: false,
+                    series: [{
+                            type: 'candlestick',
+                            name: '日K',
+                            data: data,
+                            markLine: {
+                                symbol: ['none', 'none'],
+                                data: [
+                                    [{
+                                            name: '标线2起点',
+                                            value: data[data.length - 1][1],
+                                            x: 150,
+                                            y: data[data.length - 1][1]
+                                        },
+                                        {
+                                            name: '标线2终点',
+                                            x: 1300,
+                                            y: data[data.length - 1][1]
+                                        }
+                                    ]
+                                ]
+
+
+                            },
+
+                            itemStyle: {
+                                normal: {
+                                    color: '#FD1050',
+                                    color0: '#0CF49B',
+                                    borderColor: '#FD1050',
+                                    borderColor0: '#0CF49B'
+                                }
+                            }
+                        },
+                        {
+                            name: 'close',
+                            type: 'line',
+                            data: ['100'],
+                            smooth: true,
+                            lineStyle: {
+                                normal: {
+                                    opacity: 0.5
+                                }
+                            }
+                        }
+                    ],
+                    dataZoom: [{
+                        type: 'slider',
+                        //                show:false,
+                        //                zoomlock:true,
+                        filterMode: 'filter',
+                        start: 50,
+                        end: 100,
+                        labelPrecision: 10,
+                        showDetail: false,
+                        realtime: true
+                        //                orient:'vertical'
+                    }]
+                },
+                media: [{
+                    query: {
+                        maxWidth: 500
+                    },
+                    option: {
+                        legend: { // legend 放在底部中间。
+                            right: 'center',
+                            bottom: 0,
+                            orient: 'horizontal' // legend 横向布局。
+                        },
+                        series: [{
+                                itemStyle: {
+                                    normal: {
+                                        color: 'red',
+                                        color0: '#0CF49B',
+                                        borderColor: 'red',
+                                        borderColor0: 'red',
+                                        width: '100%'
+                                    }
+                                }
+                            }
+
+                        ]
+
+
+                    }
+                }]
+
+            };
+            window.onresize = myChart.resize;
+            myChart.setOption(option);
+            counter++;
+        }, 500);
+    </script>
+</body>
+
+</html>
