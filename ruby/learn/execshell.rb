@@ -1,0 +1,2 @@
+ls = `ls`;
+puts ls;
