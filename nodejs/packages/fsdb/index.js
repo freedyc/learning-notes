@@ -41,7 +41,7 @@ const rl = readline.createInterface({
 
 
 rl.on("line", (input) => {
-    if (!input) return ''; 
+    if (!input) return '';
     const [op, key, value] = input.split(/\s+/)
     if (typeof DBManager[op] === "function") {
         DBManager[op](key, value);
