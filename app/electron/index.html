@@ -5,10 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Learning Electron</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <h1 class="info">
-        Hello World!
-    </h1>
+    <h1 class="info"></h1>
+    <div> 当前平台为：<span id="plaform"></span></div>
+    <div> 当前主题为： <span id="theme-source"></span></div>
+    <div>
+        <button id="toggle-dark">Dark Mode</button>
+        <button id="reset-to-system">Reset to System Theme</button>
+        <button id="open-new-window">创建子窗口</button>
+        <button id="icon-progress">ICON 进度条</button>
+        <button id="send-notification">发送通知</button>
+    </div>
+    <div id="show-notification"></div>
+    <h2>package.json</h2>
+    <pre class='package-json'></pre>
+    <script src="./renderer.js"></script>
 </body>
 </html>

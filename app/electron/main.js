@@ -1,6 +1,31 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow,BrowserView, ipcMain, nativeTheme, Menu, MenuItem } = require('electron');
+const fs = require('fs');
 const path = require('path');
 const process = require('process');
+// menu
+const menu = new Menu();
+menu.append(new MenuItem({
+    label: 'Electron',
+    submenu: [
+        {
+            role: 'help',
+            accelerator: process.platform === 'darwin' ? 'Alt+Cmd+I' : 'Alt+Shift+I',
+            click: () => { console.log('Electron help') }
+        },
+        {
+            label: 'Open Recent',
+            role: 'recentdocuments',
+            submenu: [
+                {
+                    label: 'Clear Recent',
+                    role: 'clearrecentdocuments',
+                }
+            ]
+        }
+    ]
+}))
+
+
 const createWindow = () => {
     // 创建一个窗口
     const win = new BrowserWindow({
@@ -15,12 +40,103 @@ const createWindow = () => {
 
     win.loadFile('index.html')
     // 打开开发者工具
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
+    menu.append(new MenuItem({
+        label: 'View',
+        submenu: [
+            {
+                role: 'Debug',
+                label: 'Debug',
+                accelerator: process.platform === 'darwin' ? 'Shift+Cmd+I' : 'Ctrl+Shift+I',
+                click: () => { win.webContents.openDevTools() }
+            }
+        ]
+    }))
+
+
+    // 设置主题
+    // console.log(nativeTheme, ipcMain)
+
+    ipcMain.handle('dark-mode:toggle', () => {
+        console.log('nativeTheme.shouldUseDarkColors', nativeTheme.shouldUseDarkColors)
+        console.log('nativeTheme.themeSource', nativeTheme.themeSource)
+        if (nativeTheme.shouldUseDarkColors) {
+            nativeTheme.themeSource = 'light'
+        } else {
+            nativeTheme.themeSource = 'dark'
+        }
+        return nativeTheme.shouldUseDarkColors
+
+    })
+    ipcMain.handle('dark-mode:system', () => {
+        nativeTheme.themeSource = 'system'
+    })
+
+    // 多窗口打开
+    ipcMain.handle('open-new-window', () => {
+        console.log('open-new-window');
+        const nwin = new BrowserWindow({
+            width: 500,
+            height: 500,
+            // frame: false,  // 去掉边框
+            // titleBarStyle: 'hidden',
+            // trafficLightPosition: { x: 20, y: 100},
+            // transparent: true,
+        })
+        // 点击穿透， 设置后对话框不介绍鼠标事件
+        // nwin.setIgnoreMouseEvents(true)
+        nwin.loadFile('src/static/index2.html')
+    })
+
+    // 进度展示
+    let progressInterval
+    ipcMain.handle('progress', (event, arg) => {
+        // 进度条
+
+        const INCREMENT = 0.03;
+        const INTERVAL_DELAY = 200;
+
+        let c = 0;
+        if (progressInterval) { return };
+        progressInterval = setInterval(() => {
+            // console.log('progressInterval', c);
+            win.setProgressBar(c);
+            if (c < 2) {
+                c += INCREMENT;
+            } else {
+                c = -1;
+                win.setProgressBar(c);
+                clearInterval(progressInterval);
+                progressInterval = null;
+            }
+        }, INTERVAL_DELAY);
+
+        app.on('before-quit', () => {
+            // 在退出之前执行
+            clearInterval(progressInterval);
+            win.setProgressBar(-1);
+            progressInterval = null;
+        })
+    })
+
+    // Browser View
+    // const view = new BrowserView();
+    // win.setBrowserView(view);
+    // view.setBounds({ x: 0, y: 0, width: 300, height: 300 })
+    // view.webContents.loadURL('https://electronjs.org')
+
+
 }
+
+const fileName = 'recently-used.md'
+fs.writeFile(fileName, 'HHHHHHHHH', () => {
+  app.addRecentDocument(path.join(__dirname, fileName))
+})
 
 // 在 app ready 事件中创建窗口
 app.whenReady().then(() =>{
-    createWindow()
+    createWindow();
+    Menu.setApplicationMenu(menu);
 })
 
 
@@ -36,6 +152,8 @@ printAppInfo();
 
 
 app.on('window-all-closed', () => {
+    // 清空最近文档
+    app.clearRecentDocuments();
     // window关闭所有窗口时退出应用
     if(process.platform !== 'darwin'){
         app.quit()
