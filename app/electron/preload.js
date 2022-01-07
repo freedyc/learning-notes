@@ -8,7 +8,6 @@ window.addEventListener('DOMContentLoaded', () => {
         const element = document.querySelector(selector)
         if (element) element.innerText = text
     }
- 
     const pckText = fs.readFileSync('./package.json').toString('utf-8')
     replaceText('#plaform',  process.platform)
     replaceText('.package-json', pckText);
