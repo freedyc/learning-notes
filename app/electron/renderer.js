@@ -1,4 +1,3 @@
-
 const gid = (id) => document.getElementById(id)
 document.getElementById('toggle-dark').addEventListener('click', async () => {
     const isDarkMode = await window.darkMode.toggle();
@@ -40,3 +39,21 @@ gid('send-notification').addEventListener('click', () => {
         })
     }
 })
+
+
+gid('copy').addEventListener('click', () => {
+    console.log('click copy btn')
+    const copyText = gid('copy-text')
+    console.log(copyText.value);
+    // copyText.select()
+    // document.execCommand('copy')
+    // copyText.blur()
+    // electron api 实现复制粘贴
+    window.clipboard.copy(`Electron clipboard${copyText.value}`);
+})
+
+gid('paste').addEventListener('click', () => {
+    console.log('paste');
+    // document.execCommand('paste');
+    console.log('打印粘贴内容', window.clipboard.paste('123'));
+});

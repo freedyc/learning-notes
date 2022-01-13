@@ -1,6 +1,6 @@
 // 因为无法在主进程中编辑DOM,所有痛殴预加载脚本 有权防伪两个渲染全局， （window, document, 和Nodejs环
 const fs = require('fs');
-const { contextBridge, ipcRenderer} = require('electron');
+const { contextBridge, ipcRenderer, clipboard} = require('electron');
 
 window.addEventListener('DOMContentLoaded', () => {
     console.log('.dom content loaded')
@@ -27,3 +27,8 @@ contextBridge.exposeInMainWorld('operation', {
     newWindow: () => ipcRenderer.invoke('open-new-window'),
     progress: () => ipcRenderer.invoke('progress')
 })
+
+contextBridge.exposeInMainWorld('clipboard', {
+    copy: (text) => clipboard.writeText(text),
+    paste: () => clipboard.readText()
+});
