@@ -36,6 +36,6 @@ app.use(async (ctx) => {
     }
 })
 
-server.listen(3000, () => {
+server.listen(3001, () => {
     console.log('start 3000');
 })
