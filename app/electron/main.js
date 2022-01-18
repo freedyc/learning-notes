@@ -124,7 +124,25 @@ const createWindow = () => {
     // win.setBrowserView(view);
     // view.setBounds({ x: 0, y: 0, width: 300, height: 300 })
     // view.webContents.loadURL('https://electronjs.org')
+    const log = console.log;
+    log('获取当前应用程序所在目录', app.getAppPath());
+    log('获取Home目录', app.getPath('home'));
+    log('获取应用程序数据目录', app.getPath('appData'));
+    log('获取应用程序用户数据目录', app.getPath('userData'));
+    log('获取临时文件目录', app.getPath('temp'));
+    log('获取当前可执行文件', app.getPath('exe'));
+    log('获取module目录', app.getPath('module'));
+    log('当前桌面文件夹', app.getPath('desktop'));
+    log('用户文档目录', app.getPath('documents'));
+    log('用户下载目录', app.getPath('downloads'));
+    log('用户音乐目录', app.getPath('music'));
+    log('用户视频目录', app.getPath('videos'));
+    log('用户图片目录', app.getPath('pictures'));
+    // log('用户最新访问文件目录', app.getPath('recent')); // 仅window支持
+    log('用户日志目录', app.getPath('logs'));
+    log('奔溃转存目录', app.getPath('crashDumps'));
 
+    log('获取当前app版本号', app.getVersion());
 
 }
 
