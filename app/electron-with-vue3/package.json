@@ -2,14 +2,22 @@
   "name": "electron-with-vue3",
   "version": "1.0.0",
   "description": "",
+  "workspaces": [
+    "src/renderer"
+  ],
   "main": "./src/main/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "concurrently 'yarn start:renderer' 'wait-on http://localhost:8080 && electron .'",
+    "start:renderer": "yarn workspace renderer serve"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "electron": "^16.0.7"
+    "electron": "^16.0.7",
+    "wait-on": "^6.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^7.0.0"
   }
 }
