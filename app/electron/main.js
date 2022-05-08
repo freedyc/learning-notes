@@ -4,6 +4,8 @@ const path = require('path');
 const process = require('process');
 // menu
 const menu = new Menu();
+console.log('获取应用程序用户数据目录', app.getPath('userData'));
+
 menu.append(new MenuItem({
     label: 'Electron',
     submenu: [
