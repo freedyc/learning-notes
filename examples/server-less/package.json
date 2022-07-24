@@ -1,0 +1,26 @@
+{
+  "name": "server-less",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/koa": "^2.13.5",
+    "@types/node": "^18.0.6",
+    "awilix": "^7.0.3",
+    "awilix-koa": "^7.0.1",
+    "co": "^4.6.0",
+    "koa": "^2.13.4",
+    "koa-connect-history-api-fallback": "^0.3.1",
+    "koa-static": "^5.0.0",
+    "koa-swig": "^2.2.1",
+    "nodemon": "^2.0.19",
+    "ts-node": "^10.9.1"
+  }
+}
