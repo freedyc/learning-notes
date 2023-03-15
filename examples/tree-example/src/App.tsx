@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 import EChart from './Echart';
 import ReactFlow from './ReactFlow';
@@ -6,8 +5,7 @@ import ReactFlow from './ReactFlow';
 function App() {
   return (
     <div className="App">
-	    <EChart />
-
+	    {/* <EChart /> */}
       <ReactFlow/>
     </div>
   )
