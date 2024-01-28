@@ -1,0 +1,88 @@
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+
+<H1>1</H1>
+<div id="result"></div>
+<script>
+    // console.log('....')
+    // const startComet = () => {
+
+    //     $.ajax( {
+    //         url: "/data",
+    //         method: 'GET',
+    //         async: true, 
+    //         success: function(data) {
+    //             // HTTP 长连接时这里不执行
+    //             console.log("data", data);
+    //             // startComet();
+    //         }, 
+    //         complete: function (data) {
+    //             console.log("complete", data.responseText);
+    //         },
+    //         timeout: 0 
+    //     });
+    // }
+
+    // startComet();
+    // async function startLongPolling() {
+    //   const resultDiv = document.getElementById('result');
+
+    //   const controller = new AbortController();
+    //   const signal = controller.signal;
+
+    //   try {
+    //     while (true) {
+    //       const response = await fetch('/data', { signal });
+    //       const data = await response.text();
+    //       console.log("data", data);
+    //       // 处理收到的数据
+    //       resultDiv.innerHTML += `<p>New data: ${data}</p>`;
+    //     }
+    //   } catch (error) {
+    //     // 处理中止请求的情况
+    //     if (error.name === 'AbortError') {
+    //       resultDiv.innerHTML += '<p>Long polling aborted.</p>';
+    //     } else {
+    //       resultDiv.innerHTML += `<p>Error: ${error.message}</p>`;
+    //     }
+    //   }
+    // }
+
+    // // 启动长连接
+    // startLongPolling();
+
+
+    function startComet() {
+      const resultDiv = document.getElementById('result');
+
+      function pollData() {
+        const xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function() {
+          console.log(xhr.readyState);
+          if (xhr.readyState === 3) {
+            // readyState 为 3 表示数据传输中
+            const responseData = xhr.responseText.trim();
+            if (responseData !== "") {
+              // 处理收到的数据
+              resultDiv.innerHTML += `<p>New data: ${responseData}</p>`;
+            }
+          }
+
+          if (xhr.readyState === 4) {
+            // 请求完成，继续下一轮长轮询
+            // pollData();
+          }
+        };
+
+        xhr.open('GET', 'http://localhost:3000/data', true);
+        xhr.setRequestHeader('Cache-Control', 'no-cache');
+        xhr.send();
+      }
+
+      // 启动长轮询
+      pollData();
+    }
+
+    // 启动 HTTP Comet 客户端
+    startComet();
+</script>

@@ -1,0 +1,42 @@
+ <button id="cancelButton">Cancel Request</button>
+<div id="result"></div>
+
+<script>
+    let xhr;
+
+    document.getElementById('cancelButton').addEventListener('click', cancelRequest);
+
+    function cancelRequest() {
+        if (xhr) {
+            // 调用 abort() 方法来取消请求
+            xhr.abort();
+            document.getElementById('result').innerHTML = '<p>Request canceled.</p>';
+        }
+    }
+
+    function fetchData() {
+        // 创建 XMLHttpRequest 对象
+        xhr = new XMLHttpRequest();
+
+        // 设置回调函数处理请求结果
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    // 请求成功，处理数据
+                    const data = JSON.parse(xhr.responseText);
+                    document.getElementById('result').innerHTML = `<p>Data received: ${JSON.stringify(data)}</p>`;
+                } else {
+                    // 请求失败
+                    document.getElementById('result').innerHTML = `<p>Request failed with status: ${xhr.status}</p>`;
+                }
+            }
+        };
+
+        // 发起 GET 请求
+        xhr.open('GET', '/data', true);
+        xhr.send();
+    }
+
+    // 启动请求
+    fetchData();
+</script>

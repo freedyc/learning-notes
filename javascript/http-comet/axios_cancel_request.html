@@ -1,0 +1,50 @@
+<script src="
+https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js
+"></script>
+
+<button id="cancelButton">Cancel Request</button>
+<div id="result"></div>
+
+<script>
+    // 创建 CancelToken.source
+    const { CancelToken, source } = axios.CancelToken;
+
+    // 创建取消令牌
+    const cancelTokenSource = source();
+
+    // 创建 Axios 实例，并将取消令牌传递给 cancelToken
+    const axiosInstance = axios.create({
+        cancelToken: cancelTokenSource.token,
+    });
+
+    console.log(cancelTokenSource.token, 'cancelTokenSource.token')
+
+    document.getElementById('cancelButton').addEventListener('click', cancelRequest);
+
+    function cancelRequest() {
+        // 调用 cancel 方法来取消请求
+        cancelTokenSource.cancel('Request canceled by user.');
+        document.getElementById('result').innerHTML = '<p>Request canceled.</p>';
+    }
+
+    function fetchData() {
+        axiosInstance.get('/data')
+            .then(response => {
+                // 处理请求成功的数据
+                const data = response.data;
+                document.getElementById('result').innerHTML = `<p>Data received: ${JSON.stringify(data)}</p>`;
+            })
+            .catch(error => {
+                // 检查请求是否被取消
+                if (axios.isCancel(error)) {
+                    console.log('Request canceled:', error.message);
+                } else {
+                    // 处理其他错误
+                    console.error('Error:', error.message);
+                }
+            });
+    }
+
+    // 启动请求
+    fetchData();
+</script>
