@@ -1,0 +1,34 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/8.0.20/jsrsasign-all-min.js"></script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/8.0.20/jsrsasign-all-min.js"></script>
+    
+</head>
+<body>
+    <textarea id="input1" cols="100" rows="20"></textarea>
+    <div>转换成</div>
+    <textarea id="input2"cols="100" rows="20"></textarea>
+    <script>
+        function encryptNetwork(encryptData) {
+            // 转换成pem格式的秘钥, 生成秘钥实例 (RSAKey)
+            const publicPemKey = "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4LOT7W5nTs42xBpsL0Ub\nvehwfLggB15ZbXecNB69KkEKYwO33BefbPvK7O1MECbXMBtmP3PT1OlylxnwMDmA\nAeDax2dkWG/zmG5ZO7jt7vvghTpsTBDTdhPmWf38OmGK7M61W7NCmqH79h2mkXMh\nR+Fh48b7cwFsh9y3vgIayPK0uRZ0/Q3NeZo6cNClkFb4sPGVVRP0MevfnIlLeMMQ\ndQdtw9GdYAiNXsAYyRCqCl2GxASohcFALLxGez/FsYidbtVLYzyLjlGApTY64Ifg\n07lJiWtgU75WF/Si6f+94a+NNW2YlBarqgGzMct1NfGqzk4IiGOxaMgZK10qzlc2\n7wIDAQAB\n-----END PUBLIC KEY-----\n"
+
+            var pub = KEYUTIL.getKey(publicPemKey)
+            // var enc = jsrsasign.KJUR.crypto.Cipher.encrypt(encryptData, pub)
+            // return enc
+            var enc = KJUR.crypto.Cipher.encrypt(encryptData, pub, 'RSAOAEP')  //此为添加OAEP填充方式的加密方法
+            // var enc = KJUR.crypto.Cipher.encrypt(encryptData, pub)  //此为添加OAEP填充方式的加密方法
+            console.log('enc', enc)
+            return hextob64(enc)
+        }
+        document.getElementById('input1').oninput = function(e) {
+            // console.log(e.target.value)
+            document.getElementById('input2').value = encryptNetwork(e.target.value)
+        }
+    </script>
+</body>
+</html>
