@@ -1,0 +1,4 @@
+:80 {
+    root * ./static/
+    file_server
+}
