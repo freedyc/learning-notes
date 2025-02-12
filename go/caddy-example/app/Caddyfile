@@ -1,4 +1,11 @@
+{
+	# debug
+	admin off
+}
+
 :80 {
-    root * ./static/
-    file_server
+	root * /build
+	file_server {
+		fs embedded
+	}
 }
