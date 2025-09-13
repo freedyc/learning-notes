@@ -1,0 +1,14 @@
+.react-flow-node-selected {
+  --node-selected-color: #6366f1;
+  --node-selected-border-size: 2px;
+}
+
+.react-flow .react-flow__node.selected {
+  box-shadow: 0 0 0 var(--node-selected-border-size) var(--node-selected-color);
+  border-radius: 8px;
+  transform: scale(1.02);
+}
+
+.react-flow .react-flow__node.selected:hover {
+  box-shadow: 0 0 0 var(--node-selected-border-size) var(--node-selected-color);
+}
