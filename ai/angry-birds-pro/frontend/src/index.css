@@ -1,0 +1,19 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; /* 禁止滚动 */
+  background-color: #87CEEB; /* 天空蓝背景 */
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  display: block; /* 移除 canvas 默认的底部留白 */
+}
